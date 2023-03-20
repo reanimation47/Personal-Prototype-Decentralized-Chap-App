@@ -1,24 +1,22 @@
 import GUN from 'gun';
-import 'gun/sea'; // Security, Encryption, Authorization
+import 'gun/sea';
 import 'gun/axe';
-import { writable } from 'svelte/store'
+import { writable } from 'svelte/store';
 
-//Database
+// Database
 export const db = GUN();
 
-//GUN user
-export const user = db.user().recall({
-    sessionStorage: true
-})
+// Gun User
+export const user = db.user().recall({sessionStorage: true});
 
-//Current User's username
+// Current User's username
 export const username = writable('');
 
-user.get('alias').on(v => username.set(v));
+user.get('alias').on(v => username.set(v))
 
-db.on('auth', async (event) =>{
-    const alias = await user.get('alias'); //get username string
+db.on('auth', async(event) => {
+    const alias = await user.get('alias'); // username string
     username.set(alias);
 
-    console.log(`user ${alias} signed in`);
+    console.log(`signed in as ${alias}`);
 });
